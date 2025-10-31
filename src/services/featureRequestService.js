@@ -3,7 +3,7 @@
  * Handles all API calls related to feature requests
  */
 
-const API_BASE_URL = 'http://localhost:5173/api';
+const API_BASE_URL = 'https://williams-marking-out-using.trycloudflare.com/api';
 
 export class FeatureRequestService {
   /**
