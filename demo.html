@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feature Request Widget Demo</title>
+  <link rel="stylesheet" href="./dist/feature-request-widget.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f6f6f7;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #202223;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Feature Request Widget Demo</h1>
+    <div id="feature-requests"></div>
+  </div>
+
+  <script src="./dist/feature-request-widget.umd.js"></script>
+  <script>
+    // Initialize the widget
+    window.FeatureRequestWidget.init({
+      elementId: 'feature-requests',
+      customerId: 'demo-user@example.com'
+    });
+  </script>
+</body>
+</html>

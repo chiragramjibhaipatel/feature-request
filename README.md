@@ -1,52 +1,215 @@
-# Feature Request Web Component
+# Feature Request Widget
 
-A custom web component for managing feature requests with upvoting functionality.
+An embeddable widget for managing feature requests with upvoting functionality. Built with React and Shopify Polaris.
 
 ## Features
 
-- ✅ Display feature request cards
-- ✅ Add new feature requests
-- ✅ Upvote/downvote requests
-- ✅ Tag support
-- ✅ Status tracking (pending, approved, assigned, in-progress, done, archived)
-- ✅ Shadow DOM for style encapsulation
-- ✅ Responsive design
-- ✅ Mock data fallback when API is unavailable
+- 📊 Kanban-style board with customizable status columns
+- 👍 Upvote/downvote functionality
+- 🏷️ Tag support for categorizing requests
+- 📱 Responsive design
+- 🎨 Shopify Polaris UI components
+- 🔌 Easy integration into any project
+- 📦 Lightweight and performant
 
-## File Structure
+## Installation
 
+### Option 1: NPM/Yarn (Recommended)
+
+```bash
+npm install feature-request-widget
 ```
-/home/claude/
-├── services/
-│   └── feature-request-service.js    # API service layer
-├── feature-request-component.js      # Main web component
-└── index.html                        # Demo page
+
+or
+
+```bash
+yarn add feature-request-widget
+```
+
+### Option 2: CDN
+
+Include the widget script and styles in your HTML:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/feature-request-widget@1.0.0/dist/feature-request-widget.css">
+<script src="https://unpkg.com/feature-request-widget@1.0.0/dist/feature-request-widget.umd.js"></script>
 ```
 
 ## Usage
 
-### Basic HTML Usage
+### Basic Usage (HTML + CDN)
 
 ```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My App</title>
+  <link rel="stylesheet" href="https://unpkg.com/feature-request-widget@1.0.0/dist/feature-request-widget.css">
 </head>
 <body>
-  <feature-request-component></feature-request-component>
-  
-  <script type="module" src="feature-request-component.js"></script>
+  <!-- Widget container -->
+  <div id="feature-requests"></div>
+
+  <!-- Widget script -->
+  <script src="https://unpkg.com/feature-request-widget@1.0.0/dist/feature-request-widget.umd.js"></script>
+
+  <!-- Initialize widget -->
+  <script>
+    window.FeatureRequestWidget.init({
+      elementId: 'feature-requests',
+      customerId: 'user@example.com'
+    });
+  </script>
 </body>
 </html>
 ```
 
-## API Endpoints
+### ES Module Usage
 
-The component expects the following API endpoints at `https://www.example.com/api`:
+```javascript
+import FeatureRequestWidget from 'feature-request-widget';
+import 'feature-request-widget/dist/feature-request-widget.css';
 
-### GET `/feature-requests`
+FeatureRequestWidget.init({
+  elementId: 'feature-requests',
+  customerId: 'user@example.com',
+  config: {
+    // Additional configuration options
+  }
+});
+```
+
+### React Integration
+
+```javascript
+import { useEffect } from 'react';
+import FeatureRequestWidget from 'feature-request-widget';
+import 'feature-request-widget/dist/feature-request-widget.css';
+
+function MyComponent() {
+  useEffect(() => {
+    FeatureRequestWidget.init({
+      elementId: 'feature-requests',
+      customerId: currentUser.id
+    });
+
+    return () => {
+      FeatureRequestWidget.destroy('feature-requests');
+    };
+  }, []);
+
+  return <div id="feature-requests"></div>;
+}
+```
+
+### Vue Integration
+
+```vue
+<template>
+  <div id="feature-requests"></div>
+</template>
+
+<script>
+import FeatureRequestWidget from 'feature-request-widget';
+import 'feature-request-widget/dist/feature-request-widget.css';
+
+export default {
+  mounted() {
+    FeatureRequestWidget.init({
+      elementId: 'feature-requests',
+      customerId: this.currentUser.id
+    });
+  },
+  beforeUnmount() {
+    FeatureRequestWidget.destroy('feature-requests');
+  }
+}
+</script>
+```
+
+### Angular Integration
+
+```typescript
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import FeatureRequestWidget from 'feature-request-widget';
+import 'feature-request-widget/dist/feature-request-widget.css';
+
+@Component({
+  selector: 'app-feature-requests',
+  template: '<div id="feature-requests"></div>'
+})
+export class FeatureRequestsComponent implements OnInit, OnDestroy {
+  ngOnInit() {
+    FeatureRequestWidget.init({
+      elementId: 'feature-requests',
+      customerId: this.currentUser.id
+    });
+  }
+
+  ngOnDestroy() {
+    FeatureRequestWidget.destroy('feature-requests');
+  }
+}
+```
+
+## Configuration
+
+### `init(options)`
+
+Initialize the widget with the following options:
+
+```javascript
+FeatureRequestWidget.init({
+  elementId: 'feature-requests',  // Required: DOM element ID
+  customerId: 'user@example.com', // Required: Unique user identifier
+  config: {
+    // Optional configuration object
+  }
+});
+```
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `elementId` | string | Yes | The ID of the DOM element where the widget will be rendered |
+| `customerId` | string | Yes | Unique identifier for the current user (for upvoting) |
+| `config` | object | No | Additional configuration options |
+
+## API Methods
+
+### `destroy(elementId)`
+
+Unmount a specific widget instance:
+
+```javascript
+FeatureRequestWidget.destroy('feature-requests');
+```
+
+### `destroyAll()`
+
+Unmount all widget instances:
+
+```javascript
+FeatureRequestWidget.destroyAll();
+```
+
+## Status Options
+
+The widget supports the following statuses out of the box:
+
+- ⏱️ Pending
+- 👍 Approved
+- 📋 Assigned
+- ⚙️ In Progress
+- ✅ Done
+- ❌ Archived
+
+## Backend Integration
+
+The widget expects a backend API with the following endpoints:
+
+### GET `/api/feature-requests`
 Fetch all feature requests
 ```json
 Response: [
@@ -61,13 +224,14 @@ Response: [
 ]
 ```
 
-### POST `/feature-requests`
+### POST `/api/feature-requests`
 Create a new feature request
 ```json
 Request Body: {
   "title": "string",
   "description": "string",
-  "tags": ["string"]
+  "tags": ["string"],
+  "customerId": "string"
 }
 
 Response: {
@@ -80,89 +244,49 @@ Response: {
 }
 ```
 
-### POST `/feature-requests/:id/upvote`
+### POST `/api/feature-requests/:id/upvote`
 Toggle upvote for a feature request
 ```json
 Request Body: {
-  "userId": "string"
+  "customerId": "string",
+  "hasUpvoted": boolean
 }
 
 Response: {
-  // Updated feature request object
+  "upvotes": ["string"]
 }
 ```
 
-### PATCH `/feature-requests/:id/status`
-Update feature request status
-```json
-Request Body: {
-  "status": "pending" | "approved" | "assigned" | "in-progress" | "done" | "archived"
-}
-
-Response: {
-  // Updated feature request object
-}
-```
-
-### DELETE `/feature-requests/:id`
-Delete a feature request
-
-## Updating the API Domain
-
-To change the API domain from `www.example.com`, edit `services/feature-request-service.js`:
-
-```javascript
-const API_BASE_URL = 'https://your-domain.com/api';
-```
-
-## Features in Detail
-
-### Shadow DOM
-The component uses Shadow DOM for style encapsulation, preventing CSS conflicts with the parent page.
-
-### User ID Management
-User IDs are automatically generated and stored in localStorage to track user upvotes across sessions.
-
-### Mock Data Fallback
-If the API is unavailable, the component automatically uses mock data for demonstration purposes.
-
-### Responsive Design
-The component is fully responsive and works on mobile, tablet, and desktop devices.
-
-## Customization
-
-### Styling
-All styles are embedded in the Shadow DOM. To customize, edit the `<style>` section in `feature-request-component.js`.
-
-### Status Colors
-Modify the status badge colors in the CSS:
-```css
-.status-pending { background: #fef3c7; color: #92400e; }
-.status-approved { background: #dbeafe; color: #1e40af; }
-.status-in-progress { background: #ddd6fe; color: #5b21b6; }
-.status-done { background: #d1fae5; color: #065f46; }
-```
-
-## Browser Support
-
-- Chrome/Edge 67+
-- Firefox 63+
-- Safari 10.1+
-- Opera 54+
+**Note:** If the API is unavailable, the widget will automatically fall back to demo data.
 
 ## Development
 
-To test locally:
-1. Open `index.html` in a web browser
-2. The component will load with mock data if the API is unavailable
-3. Try adding new requests and upvoting
+### Build the widget
 
-## Future Enhancements
+```bash
+npm run build
+```
 
-Potential features to add:
-- Search and filter functionality
-- Sorting options (by upvotes, date, status)
-- Comment system
-- User authentication
-- Real-time updates with WebSockets
-- Admin panel for status management
+This will create the distributable files in the `dist/` directory:
+- `feature-request-widget.umd.js` - UMD format for browser/CDN usage
+- `feature-request-widget.es.js` - ES module format for bundlers
+- `feature-request-widget.css` - Widget styles
+
+### Run development server
+
+```bash
+npm run dev
+```
+
+The development server will start at `http://localhost:3001`
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## License
+
+ISC

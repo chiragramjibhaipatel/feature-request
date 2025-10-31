@@ -1,14 +1,26 @@
 {
-  "name": "feature-request",
+  "name": "feature-request-widget",
   "version": "1.0.0",
-  "description": "A custom web component for managing feature requests with upvoting functionality.",
-  "main": "feature-request-component.js",
+  "description": "A embeddable widget for managing feature requests with upvoting functionality.",
+  "main": "dist/feature-request-widget.umd.js",
+  "module": "dist/feature-request-widget.es.js",
+  "types": "dist/widget.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
-  "keywords": [],
+  "keywords": [
+    "feature-request",
+    "widget",
+    "feedback",
+    "upvoting",
+    "kanban",
+    "react"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
